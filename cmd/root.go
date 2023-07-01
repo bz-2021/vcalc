@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <bz2021@mail.sdu.edu.cn>
+Copyright © 2023 bz2021 <bz2021@mail.sdu.edu.cn>
 */
 package cmd
 
@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 )
+
+var filesPath string
+var format string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -25,13 +28,12 @@ $$  \ /$$/ /$$$$$$$/  $$$$$$  |$$ |/$$$$$$$/
 Vcalc is a simple CLI tool written by Go
 allows you to easily calculate the total duration
 of video files within a specified directory.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		Error(cmd, args, ErrUnrecognizedSubcommand)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -40,13 +42,6 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.vcalc.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().StringVarP(&filesPath, "directory", "d", "./", "source directory to read from")
+	rootCmd.PersistentFlags().StringVarP(&format, "format", "f", "HH:MM:SS", "specified format")
 }
