@@ -12,8 +12,8 @@ import (
 var totalCmd = &cobra.Command{
 	Use:     "total",
 	Aliases: []string{"t"},
-	Short:   "Calculate total duration.",
-	Long: `Calculate the total duration 
+	Short:   "Calculate and print the total duration.",
+	Long: `Calculate and print the total duration 
 of all videos in the specified directory.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 没有提供 -d，默认为当前路径
@@ -33,8 +33,8 @@ of all videos in the specified directory.`,
 		}
 		// 计算总时长
 		duration := getTotalDuration(cmd, args, filesPath, &dirArray)
-
-		printReformat(duration)
+		// 打印总时长
+		printReformat(&duration)
 	},
 }
 

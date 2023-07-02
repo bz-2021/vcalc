@@ -1,6 +1,18 @@
 package utils
 
-import "strings"
+import (
+	"path/filepath"
+	"strings"
+)
+
+// 对于 IO 密集型任务，适合开多个协程进行并发处理
+
+var DirectoryPrefix string = "└── "
+var MidChildPrefix string = "├── "
+var LastChildPrefix string = "│   "
+var SpacePrefix string = "    "
+
+var VisitedPath map[string]bool
 
 // FileTreeNode 存储文件树的节点信息
 type FileTreeNode struct {
@@ -18,5 +30,22 @@ type FileTreeNode struct {
 
 	Prefix strings.Builder // 用于绘制树状结构的前缀
 	Attr   strings.Builder //
-	Path   strings.Builder
+	Path   strings.Builder // 用于保存路径信息
+}
+
+func New(path string) *FileTreeNode {
+	builder := &strings.Builder{}
+	prefix := &strings.Builder{}
+	builder.WriteString(path)
+	prefix.WriteString(DirectoryPrefix)
+	return &FileTreeNode{Level: 0, Prefix: *prefix, Path: *builder}
+}
+
+// Visit 遍历节点下所有的子目录和子文件
+func (node *FileTreeNode) Visit(Level int8) (dirs, files int) {
+	if path, err := filepath.Abs(node.Path.String()); err == nil {
+		path = filepath.Clean(path)
+		VisitedPath[path] = true
+	}
+	return 0, 0
 }

@@ -9,7 +9,6 @@ import (
 )
 
 var filesPath string
-var format string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -43,5 +42,4 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&filesPath, "directory", "d", "./", "source directory to read from")
-	rootCmd.PersistentFlags().StringVarP(&format, "format", "f", "HH:MM:SS", "specified format")
 }

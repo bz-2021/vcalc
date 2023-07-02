@@ -24,23 +24,26 @@ func Error(cmd *cobra.Command, args []string, err error) {
 
 // 递归计算总时长
 func getTotalDuration(cmd *cobra.Command, args []string, filesPath string, entry *[]os.DirEntry) time.Duration {
-	//var duration int
+	var totalDuration time.Duration
 	for _, v := range *entry {
 		vPath := path.Join(filesPath, v.Name())
 		if isVideo(vPath) {
+			// 可能会遇到将其他类型文件识别为视频文件的情况，暂未想出如何解决
 			timeDuration, err := getVideoDuration(vPath)
 			if err != nil {
 				Error(cmd, args, err)
 			}
-			fmt.Println(v.Name(), "duration:", timeDuration)
+			totalDuration += timeDuration
+			fmt.Println(v.Name(), timeDuration)
 		}
 	}
-	return 0
+	return totalDuration
 }
 
 // 打印格式化后的时长信息
-func printReformat(duration time.Duration) {
-	return
+func printReformat(duration *time.Duration) {
+	// TODO 原计划用户可以通过指定类似 “HH:MM:SS” 的字符串进行格式化
+	fmt.Println("Total duration:", duration)
 }
 
 // 通过 ffprobe 获取单个视频的时长
